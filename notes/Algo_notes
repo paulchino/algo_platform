@@ -1,0 +1,9 @@
+Algo notes
+1. Show questions with the embedded id
+2. On page load have javascript save the answers with key of id's
+
+3. Have the user type in the codes
+4. On submit go through each of the codes eval, and check with the answers
+
+ 
+	

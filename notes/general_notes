@@ -1,0 +1,67 @@
+1. json to bring in the data
+2. show the questions and the text editor
+	what info do i need?
+	data id.
+3. get the values of the input
+	one button on the bottom
+
+	the text editor have a data-id
+	editor.getValue();
+
+
+1. On page load you have json data that is passed to the view
+	- The text editors are loaded with the data-id and the data-difficultly?
+	- The place holders are placed inside the editors.
+
+	// on client side
+	- function that randomly selects the following
+	the function 
+	//JSON easy -> array, medium ->array, hard->array
+
+		- 3 beginner
+		- 1 intermediate
+		- 1 hard
+
+	and pushes it into an array?
+
+
+
+2. the students provide the code
+	
+	var allQuestions have the list of all questions
+	var input = allQuestions
+
+	when student submits the form need to grab the 
+	data-id of the text box and the code in the text box
+
+
+	- What is created????
+	An array of objects (for each question) is created. 
+
+	On submittal Make this
+
+	[
+		{
+			id: 1,
+			input: function() { ...},
+		},
+		{
+			id: 10,
+			input: function() { ...}
+		}
+	]
+
+	go through each array and eval each function
+
+
+
+
+//----
+check if array checks work
+the studen input is an array. The json data must be turned into an array 
+
+//--- have a type called function
+test_cases: [[],[],[]]
+test_output: [[],[],[]] 
+
+
