@@ -3,10 +3,11 @@
 	<title>Prebootcamp Assessent II: Write the Codes</title>
 </head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="<?= base_url() ?>assets/javascript/helpers.js"></script>
+<!-- bring in jquery minified -->
+<script src="<?= base_url() ?>assets/javascript/jquery-2.1.3.min.js"></script>
 <script src="<?= base_url() ?>assets/javascript/underscore.js"></script>
 <script src="<?= base_url() ?>assets/javascript/ace-builds/src-noconflict/ace.js"></script>
+<script src="<?= base_url() ?>assets/javascript/helpers.js"></script>
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/stylesheets/style.css">
 
 <style type="text/css">
@@ -19,74 +20,9 @@
 
 <script type="text/javascript">
 //number of questions correct, move inside document.ready
-var count = 0;
 
-//constructor for text editor
-var Editor = function Editor(name) {
-	this.editor = name;
-	this.name = ace.edit(name);
-	//question id
-	this.id = "";
-	//users code in string format
-	this.input = "";
 
-	this.studentEval = "";
-	this.answer = "";
-	this.test_cases = [];
-	this.test_output = [];
-	this.type = "";
 
-	//this function will be called by the test cases
-	this.casesFunction = function(shouldBeReplaced) {
-		return 'error'
-	}
-
-	//the function that will be called by the test cases
-	this.convertFunction = function() {
-		console.log(this.input)
-		console.log(typeof this.input);
-		try {
-			//console.log('hello');
-			return eval(this.input)();
-			//console.log('in ok');
-			
-		} catch(e) {
-			console.log('in errrors');
-		}
-	}
-}
-
-//----- Setups text editor setttings
-Editor.prototype.setup = function() {
-	this.name.setTheme("ace/theme/monokai");
-	this.name.getSession().setMode("ace/mode/javascript");
-}
-
-//------ used for type string, num, and arr eval
-Editor.prototype.eval = function() {
-	var evalStr = "(" + this.input +")()";
-	this.studentEval = this.evalCode(evalStr);
-}
-
-Editor.prototype.getId = function(num) {
-	this.id = num;
-}
-
-Editor.prototype.getVal = function() {
-	//stringifys user input for eval function
-	this.input = String( this.name.getValue() );
-}
-
-//takes string and evals - used for type numbers, strings, and arrays
-Editor.prototype.evalCode = function(code) {
-	try {
-		return eval(code); 
-	} catch (e) {
-    	//if (e instanceof SyntaxError) {
-        	return 'error'
-    	//} 
-	}
-}
 
 //----- code not used
 
@@ -140,20 +76,100 @@ Editor.prototype.evalCode = function(code) {
 	// 	}
 	// }
 
-
 $(document).ready(function() {
+//(function() {
+	var count = 0;
+
+	var Editor = function Editor(name) {
+		this.editor = name;
+		this.name = ace.edit(name);
+		//question id
+		this.id = "";
+		//users code in string format
+		this.input = "";
+		//eval student code for non function types
+		this.studentEval = "";
+		//json answer if type number or string
+		this.answer = "";
+		//cases for the function type questions
+		this.test_cases = [];
+		this.test_output = [];
+		//either number, string, array, or function
+		this.type = "";
+
+		//runs the test cases for the type function problems
+		this.test_function = function() {
+
+		}
+
+		//this function will be called by the test cases
+		this.casesFunction = function(shouldBeReplaced) {
+			return 'error'
+		}
+
+		//the converts the users string to a function and saves to this.test_function
+		this.convertedFunction = function() {
+			//console.log(this.input)
+			//console.log(typeof this.input);
+			try {
+				var test = eval("[" + this.input + "]")[0];
+				test(this.test_cases[0]);
+
+				this.test_function = eval("[" + this.input + "]")[0];
+				console.log(typeof this.test_function);
+				//console.log('hello');
+			} catch(e) {
+				console.log('this is in the function errors');
+				this.test_function = function(errors) {
+
+				}
+			}
+		}
+	}
+	//----- Setups text editor setttings
+	Editor.prototype.setup = function() {
+		this.name.setTheme("ace/theme/monokai");
+		this.name.getSession().setMode("ace/mode/javascript");
+	}
+
+	//------ used for type string, num, and arr eval
+	Editor.prototype.eval = function() {
+		var evalStr = "(" + this.input +")()";
+		this.studentEval = this.evalCode(evalStr);
+	}
+
+	//takes string and evals - used for type numbers, strings, and arrays
+	Editor.prototype.evalCode = function(code) {
+		try {
+			return eval(code); 
+		} catch (e) {
+	    	//if (e instanceof SyntaxError) {
+	        	return 'error'
+	    	//} 
+		}
+	}
+
+	Editor.prototype.getId = function(num) {
+		this.id = num;
+	}
+
+	Editor.prototype.getVal = function() {
+		//stringifys user input for eval function
+		this.input = String( this.name.getValue() );
+	}
+
+	//array of instances
 	var editors = [];
-	var studentSubmittal = {}, allQuestion = [];
+	var allQuestion = [];
 
 	$.get("main/jsonQuestions", function(data) {
-		var easy = randomQuestions(data,'easy',3);
-		var medium = randomQuestions(data,'medium',2);
-		var hard = randomQuestions(data,'hard',2);
+		var easy = randomQuestions(data,'easy',3), medium = randomQuestions(data,'medium',2), hard = randomQuestions(data,'hard',2);
 		allQuestions = easy.concat(medium,hard);
-		//console.log(allQuestions);
+		console.log('this is questions');
+		console.log(allQuestions);
 
-		str = appendQuestions(allQuestions);
-		$('#questions').append(str);
+		var strAppend = appendQuestions(allQuestions);
+		$('#questions').append(strAppend);
 
 		var editor0 = new Editor('editor0');
 		var editor1 = new Editor('editor1');
@@ -167,56 +183,73 @@ $(document).ready(function() {
 
 		for(var i=0; i<editors.length; i++) {
 			editors[i].setup();
-			
 			var jqueryID = "#" + editors[i].editor;
-
-			//add the question id to the editor instances
-			editors[i].getId($(jqueryID).attr('data-id'));
-			
+			editors[i].getId($(jqueryID).attr('data-id'));	
 			editors[i].type = allQuestions[i].type;
 
 			//if answer type='array' convert the answer to an array and append
-			if (allQuestions[i].type == "array") {
-				editors[i].answer = JSON.parse(allQuestions[i].answer);
+			if (allQuestions[i].type == "array" || allQuestions[i].type == "string") {
+				editors[i].answer = allQuestions[i].answer;
+				//editors[i].answer = JSON.parse(allQuestions[i].answer);
 			} else if (allQuestions[i].type == "function") {
 				editors[i].test_cases = allQuestions[i].test_cases;
 				editors[i].test_output = allQuestions[i].test_output;
 			} else {
-				editors[i].answer = allQuestions[i].answer;
+				editors[i].answer = allQuestions[i].answer;	
 			}
 		}
 		console.log(editors);
 	}, "json");
 
+//})();
+
     $('#submit').click(function() {
     	var con = confirm("Confirm submittal");
     	if (con) {
     		for(var i=0;i<editors.length;i++) {
-    			//users code is input into instance
-    			//this is a string
+    			//users code is input into instance as a string
     			editors[i].getVal();
 
+
+    			// really need to close the users input off so their code does not access global variables
+
     			//based on the instance type the eval will be different
-    			if (editors[i].type == 'number' || editors[i].type == 'string') {
+    			if (editors[i].type == 'number' || editors[i].type == 'string' || editors[i].type == 'array') {
     				editors[i].eval();	
 
-    			    if (_.isEqual(editors[i].answer, editors[i].studentEval) || editors[i].answer == editors[i].studentEval)  {
-    					console.log('question ' + i + ' is correct');
+    			    if ( _.isEqual(editors[i].answer, editors[i].studentEval) )  {
+    					//console.log('question ' + i + ' is correct');
+    					//console.log('the answer is: ' + editors[i].answer );
     					count++;
+    				} else {
+    					//console.log('question ' + i + ' is wrong');
+    					//console.log('answer: ' + editors[i].answer);
+    					//console.log('input: ' + editors[i].studentEval);
     				}
+
     			} else if (editors[i].type == "function") {
-    				//this evals the string function, converts it into a function and 
-    				//save it this.casesFunction
-    				editors[i].convertFunction();
-    				console.log('this is after convert function');
-    				console.log(editors)
+    				console.log('question ' + i + ' is a function type' );
+
+    				//this takes the string input, converts it into a function and saves it to this.convertFunction() 
+    				editors[i].convertedFunction();
+
+    				console.log(editors);
+
+    				// expect this.convert function to be the function that is saved ready for 
+    				//console.log(editors)
 
     				//loop through each test case and run the this.casesFunction through it
-    				var flag = true;
-    				for(var j=0; j<editors[i].test_cases.length; j++) {
-    					console.log('inside question ' + i);
-    					console.log('line 212!!!!!!!!');
-    					console.log(editors[i].casesFunction(editors[i].test_cases[j]));
+    				// var flag = true;
+    				// for(var j=0; j<editors[i].test_cases.length; j++) {
+    				// 	console.log('inside question ' + i);
+    				// 	console.log('line 212!!!!!!!!');
+    				// 	console.log(editors[i].casesFunction(editors[i].test_cases[j]));
+
+
+
+
+
+
     				// 	var result = editors[i].casesFunction(editors[i].test_cases[j]);
     				// 	if (result != editors[i].test_output[j]) {
     				// 		console.log('test case incorrect for case' + j );
@@ -227,11 +260,12 @@ $(document).ready(function() {
     				// if (flag) {
     				// 	console.log('answer' + i + 'is correct');
     				// 	count++;
-    				}
+    			} else {
+    				console.log('error in one of the editor question types');
     			}
     		}
     	}
-    	console.log(editors);
+    	//console.log(editors);
     })
 })
 </script>
