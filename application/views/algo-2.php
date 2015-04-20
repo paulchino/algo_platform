@@ -13,72 +13,17 @@
 <style type="text/css">
     .code-box { 
         /*position: absolute;*/
-        width: 400px;
+        width: 600px;
         height: 200px;
+        border-radius: 8px
     }
 </style>
 
 <script type="text/javascript">
-//number of questions correct, move inside document.ready
+var strict = 'hello world';
 
-
-
-
-//----- code not used
-
-	// this.setup = function() {
-	// 	this.name.setTheme("ace/theme/monokai");
-	// 	this.name.getSession().setMode("ace/mode/javascript");
-	// }
-
-	// this.eval = function() {
-	// 	var evalStr = "(" + this.input +")()";
-	// 	this.studentEval = this.evalCode(evalStr);
-	// 	//console.log(this.studentEval);
-	// }
-
-	// this.getId = function(num) {
-	// 	this.id = num;
-	// }
-
-		//going in here
-	
-		// } else {
-		// 	this.casesFunction = function(error) {
-		// 		return 'error';
-		// 	}
-		// }
-
-		// try {
-		// 	if (eval("[" + this.input + "]")[0]) {
-		// 		this.casesFunction = eval("[" + this.input + "]")[0];
-		// 	}
-		// } catch(e) {
-		// 	console.log('in here');
-		// 	this.casesFunction = function(error) {
-		// 		return 'error'
-		// 	}
-		// }
-
-	// this.getVal = function() {
-	// 	//this works for all cases
-	// 	this.input = String( this.name.getValue() );
-	// }
-
-	// this.evalCode = function(code) {
-	// 	try {
-	// 		//console.log(code);
- //    		return eval(code); 
-	// 	} catch (e) {
-	//     	//if (e instanceof SyntaxError) {
-	//         	return 'error'
-	//     	//} 
-	// 	}
-	// }
 
 $(document).ready(function() {
-//(function() {
-	var count = 0;
 
 	var Editor = function Editor(name) {
 		this.editor = name;
@@ -102,11 +47,6 @@ $(document).ready(function() {
 
 		}
 
-		//this function will be called by the test cases
-		this.casesFunction = function(shouldBeReplaced) {
-			return 'error'
-		}
-
 		//the converts the users string to a function and saves to this.test_function
 		this.convertedFunction = function() {
 			//console.log(this.input)
@@ -116,11 +56,12 @@ $(document).ready(function() {
 				test(this.test_cases[0]);
 
 				this.test_function = eval("[" + this.input + "]")[0];
-				console.log(typeof this.test_function);
+				//console.log(typeof this.test_function);
 				//console.log('hello');
 			} catch(e) {
 				console.log('this is in the function errors');
 				this.test_function = function(errors) {
+					console.log('syntax error')
 
 				}
 			}
@@ -155,7 +96,9 @@ $(document).ready(function() {
 
 	Editor.prototype.getVal = function() {
 		//stringifys user input for eval function
-		this.input = String( this.name.getValue() );
+		var re = /(function\s+.*\(\)\s+{)(.*)/;
+		var str = this.name.getValue();
+		this.input = String( str.replace(re, '$1\n     \'use strict\';\n$2') );
 	}
 
 	//array of instances
@@ -201,15 +144,15 @@ $(document).ready(function() {
 		console.log(editors);
 	}, "json");
 
-//})();
-
     $('#submit').click(function() {
+    	//determines how many question correct
+    	var algo_count_score = 0;
+
     	var con = confirm("Confirm submittal");
     	if (con) {
     		for(var i=0;i<editors.length;i++) {
     			//users code is input into instance as a string
     			editors[i].getVal();
-
 
     			// really need to close the users input off so their code does not access global variables
 
@@ -218,13 +161,13 @@ $(document).ready(function() {
     				editors[i].eval();	
 
     			    if ( _.isEqual(editors[i].answer, editors[i].studentEval) )  {
-    					//console.log('question ' + i + ' is correct');
-    					//console.log('the answer is: ' + editors[i].answer );
-    					count++;
+    					console.log('question ' + i + ' is correct. Is type number|string|array');
+    					console.log('the answer is: ' + editors[i].answer );
+    					algo_count_score++;
     				} else {
-    					//console.log('question ' + i + ' is wrong');
-    					//console.log('answer: ' + editors[i].answer);
-    					//console.log('input: ' + editors[i].studentEval);
+    					console.log('question ' + i + ' is wrong. Is type number|string|array');
+    					console.log('answer: ' + editors[i].answer);
+    					console.log('input: ' + editors[i].studentEval);
     				}
 
     			} else if (editors[i].type == "function") {
@@ -235,37 +178,34 @@ $(document).ready(function() {
 
     				console.log(editors);
 
-    				// expect this.convert function to be the function that is saved ready for 
-    				//console.log(editors)
+    				//loop through each test case and run the this.testFunction through it
+    				var flag = true;
+    				for(var j = 0; j < editors[i].test_cases.length; j++) {
+    					console.log('inside question ' + i);
+    					//console.log('line 212!!!!!!!!');
+    					console.log(editors[i].test_function(editors[i].test_cases[j]));
 
-    				//loop through each test case and run the this.casesFunction through it
-    				// var flag = true;
-    				// for(var j=0; j<editors[i].test_cases.length; j++) {
-    				// 	console.log('inside question ' + i);
-    				// 	console.log('line 212!!!!!!!!');
-    				// 	console.log(editors[i].casesFunction(editors[i].test_cases[j]));
-
-
-
-
-
-
-    				// 	var result = editors[i].casesFunction(editors[i].test_cases[j]);
-    				// 	if (result != editors[i].test_output[j]) {
-    				// 		console.log('test case incorrect for case' + j );
-    				// 		flag = false;
-    				// 	}
-    				// 	//if (editors[i].casesFunction(editors[j].test))
-    				// }
-    				// if (flag) {
-    				// 	console.log('answer' + i + 'is correct');
-    				// 	count++;
-    			} else {
-    				console.log('error in one of the editor question types');
-    			}
+    					var result = editors[i].test_function(editors[i].test_cases[j]);
+    					if (result != editors[i].test_output[j]) {
+    						console.log('test case incorrect for case' + i );
+    						console.log('answer: ' + editors[i].test_cases[j]);
+    						console.log('input: ' + result);    						
+    						flag = false;
+    					}
+    					//if (editors[i].casesFunction(editors[j].test))
+    				}
+    				if (flag) {
+    					console.log('answer' + i + 'is correct');
+    					algo_count_score++;
+	    			} else {
+	    				console.log('error in one of the editor question types');
+						console.log('answer: ' + editors[i].test_cases[j]);
+						console.log('input: ' + result);    	
+	    			}
+	    		}
     		}
     	}
-    	//console.log(editors);
+    	console.log('your score is ' + algo_count_score);
     })
 })
 </script>
