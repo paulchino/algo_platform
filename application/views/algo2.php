@@ -105,7 +105,7 @@ $(document).ready(function() {
 	var editors = [];
 	var allQuestion = [];
 
-	$.get("main/jsonQuestions", function(data) {
+	$.get("/main/jsonQuestions", function(data) {
 		var easy = randomQuestions(data,'easy',3), medium = randomQuestions(data,'medium',2), hard = randomQuestions(data,'hard',2);
 		allQuestions = easy.concat(medium,hard);
 		console.log('this is questions');

@@ -169,7 +169,7 @@
             "title": "Find E",
             "description": "Write a function that takes a string and returns the number of letter 'e' or 'E' in the string. (ie. 'Hello Earl' should return 2)",
             "answer": "",
-            "placeholder": "function findE() { return count}",
+            "placeholder": "function findE(string) { return count}",
             "type": "function",
              "test_cases": [
                     "hello Earl",

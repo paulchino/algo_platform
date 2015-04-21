@@ -11,15 +11,21 @@ class Main extends CI_Controller {
 
 	public function index()
 	{
-		//grab all the questions
-		//$questions['all_questions'] = $this->question->show();
-		$this->load->view("algo-2");
-		//echo "Welcome to CodeIgniter. The default Controller is Main.php";
+		$this->load->view("algo2");
 	}
 
 	//returns json of all the questions
 	public function jsonQuestions() {
 		echo $this->load->view("./json/algo");
+	}
+
+	public function codes() {
+		$this->load->view("algo3");
+	}
+
+	//returns json of 13 questions
+	public function algoQuestions() {
+		echo $this->load->view("./json/json_algo3");
 	}
 }
 
