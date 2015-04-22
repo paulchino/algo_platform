@@ -2,7 +2,7 @@
     "data": [
         {
             "id": 401,
-            "title": "Print1-255",
+            "title": "Print 1-255",
             "description": "Write a function that would return the sum of all the numbers from 1 to 255. (ex. 1+2+3+..+245+255)",
             "answer": 32640,
             "placeholder": "function print1_255() { return sum }",

@@ -8,6 +8,7 @@
 <script src="<?= base_url() ?>assets/javascript/underscore.js"></script>
 <script src="<?= base_url() ?>assets/javascript/ace-builds/src-noconflict/ace.js"></script>
 <script src="<?= base_url() ?>assets/javascript/helpers.js"></script>
+<script src="<?= base_url() ?>assets/javascript/editor-class.js"></script>
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/stylesheets/style.css">
 
 <style type="text/css">

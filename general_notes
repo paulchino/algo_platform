@@ -1,0 +1,21 @@
+- when a user clicks a problem the parital code pops
+- the data id is attached to the text editor
+
+
+Tasks
+- Show the fancy box when right or wrong and have a modal for the video
+
+
+
+
+
+
+
+Done
+//when the problem is clicked
+- Reset button
+- Refactor
+- get the type number, array, and string to work
+- get the function analysis to work 
+- add a submit button
+- Title, Description of the problem

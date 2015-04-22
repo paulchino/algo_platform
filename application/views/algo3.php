@@ -5,11 +5,12 @@
 	<title>Algo 3. 13 Questions</title>
 </head>
 
-<!-- bring in jquery minified -->
 <script src="<?= base_url() ?>assets/javascript/jquery-2.1.3.min.js"></script>
 <script src="<?= base_url() ?>assets/javascript/underscore.js"></script>
+<script src="<?= base_url() ?>assets/javascript/editor-class.js"></script>
 <script src="<?= base_url() ?>assets/javascript/ace-builds/src-noconflict/ace.js"></script>
 <script src="<?= base_url() ?>assets/javascript/helpers.js"></script>
+<script src="<?= base_url() ?>assets/javascript/algo_helpers.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/stylesheets/style.css">
 
@@ -17,12 +18,14 @@
     #text-editor { 
         /*position: absolute;*/
         margin-top: 40px;
-        width: 550px;
+        width: 100%;
         height: 400px;
         border-radius: 8px
-
     }
 
+    .btn {
+    	margin: 10px;
+    }
 
 </style>
 
@@ -31,76 +34,10 @@
 $(document).ready(function() {
 		var jsondata;
 		$.get("/main/algoQuestions", function(data) {
-			//console.log(data.data);
 			jsondata = data.data;
-			var str = "";
-			_.each(data.data, function(e,i) {
-				str += "<li data-id = " + "'" + e.id + "'>" + e.title + "</li>";
-			});
-			$('.question-list').html(str);
+			algohelper.appendlist(jsondata);
 		}, "json");
 
-		var Editor = function Editor(name) {
-		this.editor = name;
-		this.name = ace.edit(name);
-		//question id
-		this.id = "";
-		//users code in string format
-		this.input = "";
-		//eval student code for non function types
-		this.studentEval = "";
-		//json answer if type number or string
-		this.answer = "";
-		//cases for the function type questions
-		this.test_cases = [];
-		this.test_output = [];
-		//either number, string, array, or function
-		this.type = "";
-
-		//runs the test cases for the type function problems
-		this.test_function = function() {
-
-		}
-
-		//the converts the users string to a function and saves to this.test_function
-		this.convertedFunction = function() {
-			//console.log(this.input)
-			//console.log(typeof this.input);
-			try {
-				var test = eval("[" + this.input + "]")[0];
-				test(this.test_cases[0]);
-
-				this.test_function = eval("[" + this.input + "]")[0];
-				//console.log(typeof this.test_function);
-				//console.log('hello');
-			} catch(e) {
-				console.log('this is in the function errors');
-				this.test_function = function(errors) {
-					console.log('syntax error')
-
-				}
-			}
-		}
-	}
-
-	//----- Setups text editor setttings
-	Editor.prototype.setup = function() {
-		this.name.setTheme("ace/theme/monokai");
-		this.name.getSession().setMode("ace/mode/javascript");
-	}
-
-	Editor.prototype.setId = function(num) {
-		this.id = num;
-	}
-
-	Editor.prototype.getVal = function() {
-		//stringifys user input for eval function
-		var re = /(function\s+.*\(\)\s+{)(.*)/;
-		var str = this.name.getValue();
-		this.input = String( str.replace(re, '$1\n     \'use strict\';\n$2') );
-	}
-
-	//place text editor in center
 	var editor = new Editor('text-editor');
 	editor.setup();
 
@@ -108,26 +45,54 @@ $(document).ready(function() {
 	$(document).on("click", ".question-list li", function() {
 		var id = ($(this).attr('data-id'));
 		editor.setId(id);
-		console.log(id);
-		//based on the data-id append the partial code to the text editor
 
-		console.log(jsondata);
 		//pull out the object that has the id that matches
-		var questObj = getJsonObj(jsondata,id);
+		var questObj = algohelper.getJsonObj(jsondata,id);
 
-		editor.name.setValue(questObj.placeholder);
-		//editor
+		//either number, array, string, or function
+		editor.type = questObj.type
+
+		//add the problem id as attr and put placeholder value in editor
 		$('#text-editor').attr('data-id', id);
-		
+		editor.name.setValue(questObj.placeholder);
 
-		//put the data id in the text editor div
+		//add the test input and output to editor.test_cases and editor.test_output
+		if(questObj.type == 'function') {
+			editor.test_cases = questObj.test_cases;
+			editor.test_output = questObj.test_output;
+		} else {
+			editor.answer = questObj.answer;
+		}
 
+		//check to see if the updates are made
+		console.log(editor);
 
+		$('#problem-info').empty().html(algohelper.addDescription(jsondata,id));
 	})
 
+	$('.submit-btn').click(function() {
+		console.log( editor.name.getValue() );
+		//save the users input in a string to editor.input
+		editor.getVal();
+		console.log('this is the input');
+		console.log(editor.input);
+		algohelper.checkAnswer(editor);
+	})
+
+	$('.reset-btn').click(function() {
+		var con = confirm('Are you sure you want to reset your code?');
+		if (con) {
+			var id = $('#text-editor').attr('data-id');
+			var questObj = algohelper.getJsonObj(jsondata,id);
+			console.log(questObj);
+			//set the value to 
+			editor.name.setValue(questObj.placeholder);
+
+
+		}
+	})
 })
 
-$(document)
 </script>
 
 <body>
@@ -135,7 +100,6 @@ $(document)
 		<div class='row'>
 			<div class='col-md-3'>
 				<div class='questions'>
-					<h2>Bootcamp</h2>
 					<h2>Progess Check</h2>
 					<ul class='question-list'>
 <!-- 						<li data-id='401'>Print 1-255</li>
@@ -154,8 +118,17 @@ $(document)
 				</div>
 			</div>
 			<div class='col-md-6'>
+				<div id='problem-info'>
+					<h3>Print 1-255</h3>
+					<p>Write a function that would return the sum of all the number from 1 to 255 (ex. 1+2+3+...+245+255).</p>
+				</div>
 				<!-- text box -->
 				<div id='text-editor' data-id=''>
+				</div>
+
+				<div class='submit-div pull-right'>
+					<button class="btn btn-danger reset-btn" type="submit">Reset</button>
+					<button class="btn btn-default submit-btn" type="submit">Submit</button>
 				</div>
 
 
