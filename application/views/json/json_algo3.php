@@ -6,7 +6,9 @@
             "description": "Write a function that would return the sum of all the numbers from 1 to 255. (ex. 1+2+3+..+245+255)",
             "answer": 32640,
             "placeholder": "function print1_255() { return sum }",
-            "type": "number"
+            "type": "number",
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 402,
@@ -14,7 +16,9 @@
             "description": "Write a function that would sum all the numbers odd numbers from 1 to 5000. (ex. 1+3+5+...+4997+4999)",
             "answer": 6250000,
             "placeholder": "function printSum() { return sum }",
-            "type": "number"
+            "type": "number",
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 403,
@@ -22,7 +26,9 @@
             "description": "Write a function that would return all the an array of all odd numbers between 1 to 100. (ex. [1,3,5, .... , 97,99]). Hint: Use 'push' method.",
             "answer": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99],
             "placeholder": "function oddNumbers() { return arr }",
-            "type": "number"
+            "type": "number",
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 404,
@@ -40,7 +46,9 @@
                     0,
                     8,
                     14
-                    ]           
+                    ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"          
         },
         {
             "id": 405,
@@ -58,7 +66,9 @@
                     8,
                     300,
                     1
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 406,
@@ -76,7 +86,9 @@
                     0,
                     7.2,
                     3
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 408,
@@ -94,7 +106,9 @@
                     2,
                     1,
                     0
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 409,
@@ -112,7 +126,9 @@
                     [1,4,9],
                     [1,9,36],
                     [0]
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 410,
@@ -130,7 +146,9 @@
                     [1,2,0,3],
                     [0,3,6],
                     [0]
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 411,
@@ -148,7 +166,9 @@
                     [4,0,3],
                     [10,-2,4],
                     [0,0,0]
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 412,
@@ -166,7 +186,9 @@
                     [4,2,0],
                     [-2,5,10,1],
                     [20,10]
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         },
         {
             "id": 413,
@@ -184,7 +206,9 @@
                     ["Dojo","Dojo",2],
                     [0],
                     ["Dojo",3,"Dojo"]
-                ]
+                ],
+            "sample_answer_url": "http://player.vimeo.com/video/117467244",
+            "sample_answer_creator": "Michael Choi:Chief Instructor, Founder"
         }
         ]
 }

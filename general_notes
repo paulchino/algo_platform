@@ -4,7 +4,9 @@
 
 Tasks
 - Show the fancy box when right or wrong and have a modal for the video
+- with the Modal
 
+//depending on if the answer was true or false, a window will pop up showing the video link and a message
 
 
 
